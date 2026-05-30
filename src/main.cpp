@@ -1,7 +1,7 @@
-#include "connect4.h"
-#include "player.h"
-#include "human_player.h"
-#include "AI_player.h"
+#include "../include/connect4.h"
+#include "../include/player.h"
+#include "../include/human_player.h"
+#include "../include/AI_player.h"
 #include <iostream>
 #include <array>
 int getUserInput(int min, int max);

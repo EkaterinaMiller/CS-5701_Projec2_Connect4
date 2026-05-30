@@ -1,5 +1,5 @@
-#include "human_player.h"
-#include "helpers.h"
+#include "../include/human_player.h"
+#include "../include/helpers.h"
 
 void Human_player::makeaMove(int min, int max){
     std::cout << "Human turn. Enter column (" << min << "-" << max << "): ";

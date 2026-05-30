@@ -1,4 +1,4 @@
-#include "connect4.h"
+#include "../include/connect4.h"
 
 Connect4::Connect4(const std::array<std::array<char, NUM_COL>, NUM_ROW> & board)
 {
