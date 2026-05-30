@@ -105,3 +105,15 @@ bool Connect4::isWin(char playerToken) const
     }
     return false;
 }
+
+bool Connect4::isFull() const
+{
+    for (int c{0}; c < NUM_COL; c++)
+    {
+        if (mBoard[0][c] == ' ')
+        {
+            return false;
+        }
+    }
+    return true;
+}

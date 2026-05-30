@@ -1,3 +1,6 @@
+#ifndef CONNECT4_H
+#define CONNECT4_H
+
 #include <iostream>
 #include <vector>
 #include <array>
@@ -25,3 +28,5 @@ private:
     std::array<std::array<char, NUM_COL>, NUM_ROW> mBoard;
     bool mDone = false;
 };
+
+#endif

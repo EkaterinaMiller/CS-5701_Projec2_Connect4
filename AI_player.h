@@ -1,14 +1,16 @@
+#ifndef AI_PLAYER_H
+#define AI_PLAYER_H
 #include "connect4.h"
+#include "player.h"
 #include <iostream>
 #include <random>
+//class Connect4;
 
-class AI_player
+class AI_player: public Player
 {
-    AI_player(Connect4 & board);
-    void setToken(char t){mToken=t; }
-    char getToken() const {return mToken;}
-    void makeaMove();
-private:
-    Connect4 & mConnectBoard;
-    char mToken{'O'};
+public:
+    AI_player(Connect4 & board, char token) : Player(board, token) {}
+    virtual void makeaMove(int min, int max) override;
+
 };
+#endif

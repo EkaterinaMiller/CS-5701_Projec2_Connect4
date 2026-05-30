@@ -1,13 +1,12 @@
 #include "AI_player.h"
 
-AI_player::AI_player(Connect4 & board){
-    mConnectBoard=board;
-}
 
-void AI_player::makeaMove(){
+
+void AI_player::makeaMove(int min, int max){
     while(1){
-        int move = rand()%NUM_COL;//returns 0-6
-        if (mConnectBoard.placeToken('mToken',move)){
+        //int move = rand()%(max-min+1) + min;//returns min-max
+        int move = rand()%max;
+        if (mConnectBoard.placeToken(mToken, move)){
             break;
         }
     }
