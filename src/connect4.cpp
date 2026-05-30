@@ -16,6 +16,7 @@ void Connect4::printBoard() const
         std::cout << "|\n";
     }
     std::cout << "---------------\n";
+    std::cout << " 1 2 3 4 5 6 7\n";
 }
 /**
  * @brief Put peg into corect position on the board, starting with higher rows

@@ -9,13 +9,17 @@ void AI_player::makeaMove(int min, int max){
     if (!mConnectBoard.placeToken(mToken, move)) {
         throw std::runtime_error("AI failed to make a move");
     }
-    // while(1){
-    //     int move = rand()%(max-min+1) + min;//returns min-max
-    //     //int move = rand()%max;
-    //     if (mConnectBoard.placeToken(mToken, move)){
-    //         break;
-    //     }
-    // }
+}
+
+void AI_player::makeRandomMove(Connect4 &board, int min, int max, char playerToken)
+{
+    while(1){
+        int move = rand()%(max-min+1) + min;//returns min-max
+        //int move = rand()%max;
+        if (board.placeToken(playerToken, move)){
+            break;
+        }
+    }
 }
 
 float AI_player::evaluateBoard(const Connect4 & board, int turn) const 
@@ -30,30 +34,31 @@ float AI_player::evaluateBoard(const Connect4 & board, int turn) const
 }
 
 float AI_player::playAtRandom(Connect4 board, int turn) const {
+    if (turn!=1 and turn !=0){
+        throw std::runtime_error("Wrong argument in playAtRandom");
+    }
     // Implementation for playing at random
-    Player * player[2];
+    AI_player * player[2];
     player[0] = new AI_player(board, mToken);//assume first player is alwaysX
     player[1] = new AI_player(board, mOponentToken);//assume second player is always O
     float score = 0.0f;
-    while (!board.isDone()){
-        while(1){
-            player[turn]->makeaMove(0,6);
-            if (board.isWin(player[turn]->getToken()))
-            {
-                if (player[turn]->getToken() == mToken) {
-                    score = 1.0f; // AI wins
-                } else {
-                    score = -1.0f; // Opponent wins
-                }
-                break;
+    while(1){
+        player[turn]->makeRandomMove(board, 0, 6, player[turn]->getToken());
+        if (board.isWin(player[turn]->getToken()))
+        {
+            if (player[turn]->getToken() == mToken) {
+                score = 1.0f; // AI wins
+            } else {
+                score = -1.0f; // Opponent wins
             }
-            if (board.isFull())
-            {
-                score = 0.0f;  
-                break; 
-            }
-            turn = (turn + 1) % 2; //switch player
+            break;
         }
+        if (board.isFull())
+        {
+            score = 0.0f;  
+            break; 
+        }
+        turn = (turn + 1) % 2; //switch player
     }
 
     delete player[0];

@@ -27,7 +27,7 @@ run_CLI: connect4_CLI
 	./connect4_CLI
 
 clean:
-	rm -f *.o TESTS/*.o connect4_CLI TESTS/test
+	rm -f *.o connect4_CLI TESTS/test obj/*
 
 obj:
 	mkdir -p obj

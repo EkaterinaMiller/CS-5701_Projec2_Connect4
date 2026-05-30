@@ -23,8 +23,9 @@ private:
     int findBestMove(int min, int max) const;
     float minMove(Connect4 &board, int depth) const;
     float maxMove(Connect4 &board, int depth) const;
+    void makeRandomMove(Connect4 &board, int min, int max, char playerToken);
 
-    int mDepth{5};
+    int mDepth{4};
     char mOponentToken{(mToken == 'X') ? 'O' : 'X'};
 
     std::vector<float> mMoveTimes;
