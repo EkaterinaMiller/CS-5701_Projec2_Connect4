@@ -4,13 +4,30 @@
 #include "player.h"
 #include <iostream>
 #include <random>
-//class Connect4;
+#include <time.h>
+
+// const int MAX_DEPTH = 5;
 
 class AI_player: public Player
 {
 public:
-    AI_player(Connect4 & board, char token) : Player(board, token) {}
+    AI_player(Connect4 & board, char token);
     virtual void makeaMove(int min, int max) override;
+    void setDepth(int depth) { mDepth = depth; }
+    int getDepth() const { return mDepth; }
+    virtual ~AI_player() = default;
+private:
+    //std::mt19937 mGenerator;
+    float evaluateBoard(const Connect4 & board, int turn) const;
+    float playAtRandom(Connect4 board, int turn=0) const;
+    int findBestMove(int min, int max) const;
+    float minMove(Connect4 &board, int depth) const;
+    float maxMove(Connect4 &board, int depth) const;
+
+    int mDepth{5};
+    char mOponentToken{(mToken == 'X') ? 'O' : 'X'};
+
+    std::vector<float> mMoveTimes;
 
 };
 #endif

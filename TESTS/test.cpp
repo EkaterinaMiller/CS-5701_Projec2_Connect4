@@ -1,7 +1,7 @@
 #include "catch_amalgamated.hpp"
 #include "../connect4.h"
 
-TEST_CASE("isWin()", "[tags-optional]")
+TEST_CASE("isWin()", "[Connect4 class]")
 {
     SECTION("empty board"){                                          
         Connect4 game;
@@ -42,5 +42,21 @@ TEST_CASE("isWin()", "[tags-optional]")
                         {{'X', 'O', 'X', 'O', 'X', 'X', 'O'}},
                         {{'X', 'O', 'X', 'X', 'O', 'X', 'O'}}}});
         CHECK(game.isWin('X')==true);
+    }
+}
+TEST_CASE("isFull()", "[Connect4 class]")
+{
+    SECTION("empty board"){                                          
+        Connect4 game;
+        CHECK(game.isFull()==false);
+    }
+    SECTION("full board"){
+        Connect4 game ({{{{'X', 'O', 'X', 'O', 'X', 'O', 'X'}},
+                         {{'X', 'O', 'X', 'O', 'X', 'O', 'X'}},
+                         {{'X', 'O', 'X', 'O', 'X', 'O', 'X'}},
+                         {{'X', 'O', 'X', 'O', 'X', 'O', 'X'}},
+                         {{'X', 'O', 'X', 'O', 'X', 'O', 'X'}},
+                         {{'X', 'O', 'X', 'O', 'X', 'O', 'X'}}}});
+        CHECK(game.isFull()==true);
     }
 }

@@ -9,6 +9,7 @@ public:
     char getToken() const {return mToken;}
     void setToken(char t){mToken=t; }
     virtual void makeaMove(int min, int max) = 0; //pure virtual function
+    virtual ~Player() = default;
 protected:    
     Connect4 & mConnectBoard;
     char mToken{' '};

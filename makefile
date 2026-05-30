@@ -1,5 +1,5 @@
 CC=g++ 
-FLAGS= -Wall -Wextra -pedantic-errors
+FLAGS= -Wall -Wextra -pedantic-errors -g
 
 
 obj/%.o: src/%.cpp | obj
