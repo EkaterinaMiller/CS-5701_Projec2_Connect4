@@ -4,7 +4,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/connect4_CLI",
+            "program": "${workspaceFolder}/TESTS/test",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",

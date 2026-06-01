@@ -118,3 +118,175 @@ bool Connect4::isFull() const
     }
     return true;
 }
+ /* REtunr number of player tokens in the row with spaces
+ * 2tokens + 2 empty = 2
+ * 3tokens + 1 empty = 3
+ * 4tokens + 0 empty = 4
+ * else return 0
+ * */
+int Connect4::countRow(int row, char playerToken) const
+{
+    int total=0;
+    for (int col = 0; col < NUM_COL; col++) {
+        if (mBoard[row][col] == playerToken) {
+            if (col+2 < NUM_COL && mBoard[row][col+1] == playerToken) {
+                if (mBoard[row][col+2] == playerToken) {
+                    if (col+3 < NUM_COL && mBoard[row][col+3] == playerToken) {
+                        return 4;
+                    }
+                    //three tokens in a row, check for one empty space before or after
+                    else if ((col+3 < NUM_COL && mBoard[row][col+3] == ' ') 
+                            || (col-1>=0 && mBoard[row][col-1] == ' ')) {
+                        return 3;
+                    }
+                }
+                //two tokens in a row, check for two empty spaces before or after
+                else if ((mBoard[row][col+2] == ' ' && col+3 < NUM_COL && mBoard[row][col+3] == ' ') 
+                        || (col-1>=0 && mBoard[row][col-1] == ' ' && mBoard[row][col+2] == ' ') 
+                        || (col-2>=0 && mBoard[row][col-2] == ' ' && mBoard[row][col-1] == ' ')) {
+                    total = 2;
+                }
+                col+=1;
+            }//two
+            //check if last two with two leading empty spaces
+            else if(col+1 < NUM_COL && mBoard[row][col+1] == playerToken
+                            && (col-2>=0 && mBoard[row][col-1] == ' ' && mBoard[row][col-2] == ' ')) {
+                    total = 2;
+            }
+            col+=1;
+        }//one
+    }
+    return total;
+}
+int Connect4::countCol(int col, char playerToken) const
+{
+    int total=0;
+    for (int row = 0; row < NUM_ROW; row++) {
+        if (mBoard[row][col] == playerToken) {
+            if (row+1 < NUM_ROW && mBoard[row+1][col] == playerToken) {
+                if (row+2 < NUM_ROW && mBoard[row+2][col] == playerToken) {
+                    if (row+3 < NUM_ROW && mBoard[row+3][col] == playerToken) {
+                        return 4;
+                    }
+                    //three tokens in a row, check for one empty space above
+                    else if (row-1>=0 && mBoard[row-1][col] == ' ') {
+                        return 3;
+                    }
+                }
+                //two tokens in a row, check for two empty spaces above
+                else if (row-2>=0 && mBoard[row-2][col] == ' ' && mBoard[row-1][col] == ' ') {
+                    return 2;
+                }
+                row+=1;
+            }
+            row+=1;//already check this one, move to next
+        }//one
+    }
+    return total;
+}
+/**
+ * @return number of player tokens in the diagonal with spaces
+ * 2tokens + 2 empty = 2
+ * 3tokens + 1 empty = 3
+ * 4tokens + 0 empty = 4
+ * else return 0
+ */
+int Connect4::countDiag1(int row, int col, char playerToken) const
+{
+    for (int i = 0; row+i < NUM_ROW && col+i < NUM_COL; i++) {
+        if (mBoard[row+i][col+i] == playerToken) {
+            //found a playerTocken, check for 4 in a row
+            if (row+i+3 < NUM_ROW && col+i+3 < NUM_COL 
+                && mBoard[row+i+1][col+i+1] == playerToken 
+                && mBoard[row+i+2][col+i+2] == playerToken 
+                && mBoard[row+i+3][col+i+3] == playerToken) {
+                return 4;
+            }
+            //three tokens in a row, check for one empty space before or after
+            else if (row+i+3 < NUM_ROW && col+i+3 < NUM_COL 
+                && mBoard[row+i+1][col+i+1] == playerToken 
+                && mBoard[row+i+2][col+i+2] == playerToken 
+                && mBoard[row+i+3][col+i+3] == ' ') {
+                return 3;
+            }
+            else if ( row+i+2 < NUM_ROW && col+i+2 < NUM_COL 
+                && mBoard[row+i+1][col+i+1] == playerToken 
+                && mBoard[row+i+2][col+i+2] == playerToken 
+                && (row+i-1>=0 && col+i-1>=0 && mBoard[row+i-1][col+i-1] == ' ')  ) 
+            {
+                return 3;
+            }
+            //two tokens in a row
+            else if (row+i+1 < NUM_ROW && col+i+1 < NUM_COL 
+                && mBoard[row+i+1][col+i+1] == playerToken ){
+                    //check for two empty spaces before 
+                    if (row+i-2>=0 && col+i-2>=0 && mBoard[row+i-1][col+i-1] == ' ' && mBoard[row+i-2][col+i-2] == ' ') {
+                       return 2;
+                    }
+                    //check for two empty spaces after 
+                    else if (row+i+3 < NUM_ROW && col+i+3 < NUM_COL 
+                        && mBoard[row+i+3][col+i+3] == ' ' 
+                        && mBoard[row+i+2][col+i+2] == ' ') {
+                        return 2;
+                    }
+                    //check for one before and one after
+                    else if ( (row+i-1>=0 && col+i-1>=0 && mBoard[row+i-1][col+i-1] == ' ') 
+                            && (row+i+2 < NUM_ROW && col+i+2 < NUM_COL && mBoard[row+i+2][col+i+2] == ' ')) {
+                        return 2;
+                    }
+                }
+                i++;//already check this one, move to next
+            }
+    }
+    return 0;
+}
+
+int Connect4::countDiag2(int row, int col, char playerToken) const
+{
+    for (int i = 0; row+i < NUM_ROW && col-i >=0; i++) {
+        if (mBoard[row+i][col-i] == playerToken) {
+            //found a playerTocken, check for 4 in a row
+            if (row+i+3 < NUM_ROW && col-i-3 >=0 
+                && mBoard[row+i+1][col-i-1] == playerToken 
+                && mBoard[row+i+2][col-i-2] == playerToken 
+                && mBoard[row+i+3][col-i-3] == playerToken) {
+                return 4;
+            }
+            //three tokens in a row, check for one empty space before or after
+            else if (row+i+3 < NUM_ROW && col-i-3 >=0 
+                && mBoard[row+i+1][col-i-1] == playerToken 
+                && mBoard[row+i+2][col-i-2] == playerToken 
+                && mBoard[row+i+3][col-i-3] == ' ') {
+                return 3;
+            }
+            else if ( row+i+2 < NUM_ROW && col-i-2 >=0 
+                && mBoard[row+i+1][col-i-1] == playerToken 
+                && mBoard[row+i+2][col-i-2] == playerToken 
+                && (row+i-1>=0 && col-i+1<NUM_COL && mBoard[row+i-1][col-i+1] == ' ')  ) 
+            {
+                return 3;
+            }
+            //two tokens in a row
+            else if (row+i+1 < NUM_ROW && col-i-1 >=0 
+                && mBoard[row+i+1][col-i-1] == playerToken ){
+                    //check for two empty spaces before 
+                    if (row+i-2>=0 && col-i+2<NUM_COL && mBoard[row+i-1][col-i+1] == ' ' && mBoard[row+i-2][col-i+2] == ' ') {
+                       return 2;
+                    }
+                    //check for two empty spaces below (to the left) 
+                    else if (row+i+3 < NUM_ROW && col-i-3 >=0 
+                        && mBoard[row+i+3][col-i-3] == ' ' 
+                        && mBoard[row+i+2][col-i-2] == ' ') {
+                        return 2;
+                    }
+                    //check for one before and one after
+                    else if ( (row+i-1>=0 && col-i+1<NUM_COL && mBoard[row+i-1][col-i+1] == ' ') 
+                            && (row+i+2 < NUM_ROW && col-i-2 >=0 && mBoard[row+i+2][col-i-2] == ' ')) {
+                        return 2;
+                    }
+                }
+                i++;//already check this one, move to next
+            }
+    }
+    return 0;
+}

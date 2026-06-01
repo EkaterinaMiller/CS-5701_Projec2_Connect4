@@ -22,6 +22,10 @@ public:
     bool isWin(char playerToken) const;
     bool isFull() const;
     bool isDone() const {return mDone;}
+    int countRow(int row, char playerToken) const;
+    int countCol(int col, char playerToken) const;
+    int countDiag1(int row, int col, char playerToken) const;
+    int countDiag2(int row, int col, char playerToken) const;
 
 
 private:
