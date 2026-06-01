@@ -42,25 +42,30 @@ int main()
         return 0;
     }
     int turn = 0;
-    while (!game.isDone()){
+    game.printBoard();
+    while(1){
+        std::cout << "Player " << player[turn]->getToken() << "'s turn.\n";
+        player[turn]->makeaMove(0,6);
         game.printBoard();
-        while(1){
-            std::cout << "Player " << player[turn]->getToken() << "'s turn.\n";
-            player[turn]->makeaMove(0,6);
-            game.printBoard();
-            if (game.isWin(player[turn]->getToken()))
-            {
-                std::cout<<"Player "<<player[turn]->getToken()<<" won!\n";
-                return 0;
-            }
-            if (game.isFull())
-            {
-                std::cout<<"It is a tie!\n";
-                return 0;   
-            }
-            // game.printBoard();
-            turn = (turn + 1) % 2; //switch player
+        if (game.isWin(player[turn]->getToken()))
+        {
+            std::cout<<"Player "<<player[turn]->getToken()<<" won!\n";
+            player[0]->printMoveTimes();
+            player[1]->printMoveTimes();
+            return 0;
         }
+        if (game.isFull())
+        {
+            std::cout<<"It is a tie!\n";
+            player[0]->printMoveTimes();
+            player[1]->printMoveTimes();
+            return 0;   
+        }
+        // game.printBoard();
+        turn = (turn + 1) % 2; //switch player
     }
+    // Clean up dynamically allocated players
+    delete player[0];
+    delete player[1];   
     return 0;
 }

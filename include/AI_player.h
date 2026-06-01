@@ -18,7 +18,7 @@ public:
     virtual ~AI_player() = default;
 private:
     //std::mt19937 mGenerator;
-    float evaluateBoard(const Connect4 & board, int turn) const;
+    float evaluateBoard(const Connect4 & board) const;
     float playAtRandom(Connect4 board, int turn=0) const;
     int findBestMove(int min, int max) const;
     float minMove(Connect4 &board, int depth) const;
@@ -27,8 +27,6 @@ private:
 
     int mDepth{7};
     char mOponentToken{(mToken == 'X') ? 'O' : 'X'};
-
-    std::vector<float> mMoveTimes;
 
 };
 #endif

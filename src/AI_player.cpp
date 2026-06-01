@@ -1,14 +1,19 @@
 #include "../include/AI_player.h"
+#include <chrono>
 
 AI_player::AI_player(Connect4 & board, char token) : Player(board, token) {
     std::srand(time(NULL)); // Seed the random number generator with the current time
 }
 
 void AI_player::makeaMove(int min, int max){
+    auto start = std::chrono::steady_clock::now();
     int move = findBestMove(min, max);
     if (!mConnectBoard.placeToken(mToken, move)) {
         throw std::runtime_error("AI failed to make a move");
     }
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double, std::milli> elapsed = end - start;
+    mMoveTimes.push_back(elapsed.count());
 }
 
 void AI_player::makeRandomMove(Connect4 &board, int min, int max, char playerToken)
@@ -22,7 +27,7 @@ void AI_player::makeRandomMove(Connect4 &board, int min, int max, char playerTok
     }
 }
 
-float AI_player::evaluateBoard(const Connect4 & board, int turn) const 
+float AI_player::evaluateBoard(const Connect4 & board) const 
 {
     float score = 0.0f;
     for (int row = 0; row < NUM_ROW; row++) {
@@ -123,7 +128,7 @@ float AI_player::minMove(Connect4 &board, int depth) const
         return 0.0f; // Tie or depth limit reached
     }
     else if (depth == 0) {
-        return evaluateBoard(board, 0); // Evaluate the board state
+        return evaluateBoard(board); // Evaluate the board state
     }
     else{
         float minValue = std::numeric_limits<float>::infinity(); // Initialize minValue to a very large number
@@ -150,7 +155,7 @@ float AI_player::maxMove(Connect4 &board, int depth) const
         return 0.0f; // Tie or depth limit reached
     }
     else if (depth == 0) {
-        return evaluateBoard(board, 1); // Evaluate the board state
+        return evaluateBoard(board); // Evaluate the board state
     }
     else{
         float maxValue = -std::numeric_limits<float>::infinity(); // Initialize maxValue to a very small number
