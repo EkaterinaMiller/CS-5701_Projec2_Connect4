@@ -24,13 +24,39 @@ void AI_player::makeRandomMove(Connect4 &board, int min, int max, char playerTok
 
 float AI_player::evaluateBoard(const Connect4 & board, int turn) const 
 {
-    //Play 100 times at random and return the average score
     float score = 0.0f;
-    for (int i = 0; i < 100; i++) {
-        score += playAtRandom(board, turn);
-        // Accumulate the score for averaging
-    } 
-    return score / 100.0f;
+    for (int row = 0; row < NUM_ROW; row++) {
+        score += board.countRow(row, mToken);
+        score -= 1.2 * board.countRow(row, mOponentToken);//blocking is more impotent than creating a line
+    }
+    for (int col = 0; col < NUM_COL; col++) {
+        score += board.countCol(col, mToken);
+        score -= 1.2 * board.countCol(col, mOponentToken);
+    }
+    for (int col = 0; col < NUM_COL-3; col++) {
+        score += board.countDiag1(0,col, mToken);
+        score -= 1.2 * board.countDiag1(0, col, mOponentToken);
+    }
+    for (int row = 1; row < NUM_ROW-3; row++) {
+        score += board.countDiag1(row, 0, mToken);
+        score -= 1.2 * board.countDiag1(row, 0, mOponentToken);
+    }
+    for (int col = 3; col < NUM_COL; col++) {
+        score += board.countDiag2(0, col, mToken);
+        score -= 1.2 * board.countDiag2(0, col, mOponentToken);
+    }
+    for (int row = 1; row < NUM_ROW-3; row++) {
+        score += board.countDiag2(row, NUM_COL-1, mToken);
+        score -= 1.2 * board.countDiag2(row, NUM_COL-1, mOponentToken);
+    }
+    return score; //normalize score to be between -1 and 1
+    // //Play 100 times at random and return the average score
+    // float score = 0.0f;
+    // for (int i = 0; i < 100; i++) {
+    //     score += playAtRandom(board, turn);
+    //     // Accumulate the score for averaging
+    // } 
+    // return score / 100.0f;
 }
 
 float AI_player::playAtRandom(Connect4 board, int turn) const {
@@ -70,7 +96,7 @@ int AI_player::findBestMove(int min, int max) const
 {
     int best = 0;
     float maxValue = -std::numeric_limits<float>::infinity();//very small number
-    for (int col = min; col < max; col++) {
+    for (int col = min; col <= max; col++) {
         // Create a temporary board to simulate the move
         Connect4 tempBoard = Player::mConnectBoard; 
         if (tempBoard.placeToken(Player::mToken, col)) { // Check if the move is valid
@@ -88,10 +114,10 @@ int AI_player::findBestMove(int min, int max) const
 float AI_player::minMove(Connect4 &board, int depth) const
 {
     if (board.isWin(mToken)) {
-        return 1.0f; // AI wins
+        return 100.0f; // AI wins
     }
     else if (board.isWin(mOponentToken)) {
-        return -1.0f; // Opponent wins
+        return -100.0f; // Opponent wins
     }
     else if (board.isFull() ) {
         return 0.0f; // Tie or depth limit reached
@@ -115,10 +141,10 @@ float AI_player::minMove(Connect4 &board, int depth) const
 float AI_player::maxMove(Connect4 &board, int depth) const
 {
     if (board.isWin(mToken)) {
-        return 1.0f; // AI wins
+        return 100.0f; // AI wins
     }
     else if (board.isWin(mOponentToken)) {
-        return -1.0f; // Opponent wins
+        return -100.0f; // Opponent wins
     }
     else if (board.isFull() ) {
         return 0.0f; // Tie or depth limit reached
