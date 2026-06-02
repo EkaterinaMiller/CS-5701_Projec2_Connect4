@@ -11,25 +11,26 @@ const bool PRUNING = true; // Set to true to enable alpha-beta pruning, false fo
 class AI_player: public Player
 {
 public:
-    AI_player(Connect4 & board, char token);
+    AI_player(Connect4 & board, char token, char oponentToken, int depth = 10, bool usePruning = PRUNING);
     virtual void makeaMove(int min, int max) override;
     void setDepth(int depth) { mDepth = depth; }
     int getDepth() const { return mDepth; }
     void setPruning(bool usePruning) { mUsePruning = usePruning; }
     bool getPruning() const { return mUsePruning; }
-    virtual ~AI_player() = default;
+    virtual ~AI_player(){printExploredNodes();} // Print explored nodes when the AI player is destroyed;
 private:
-    //std::mt19937 mGenerator;
     float evaluateBoard(const Connect4 & board) const;
-    float playAtRandom(Connect4 board, int turn=0) const;
-    int findBestMove(int min, int max, bool pruning) const;
-    float minMove(Connect4 &board, int depth, bool pruning, float alpha, float beta) const;
-    float maxMove(Connect4 &board, int depth, bool pruning, float alpha, float beta) const;
-    void makeRandomMove(Connect4 &board, int min, int max, char playerToken);
+    int findBestMove(int min, int max, bool pruning, int &numNodes) const;
+    float minMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const;
+    float maxMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const;
+    void printExploredNodes() const ;
+    //float playAtRandom(Connect4 board, int turn=0) const;
+    //void makeRandomMove(Connect4 &board, int min, int max, char playerToken);
 
+    char mOponentToken{' '};
     int mDepth{10};
-    char mOponentToken{(mToken == 'X') ? 'O' : 'X'};
-    bool mUsePruning{PRUNING};
+    bool mUsePruning{PRUNING} ;
+    std::vector<int> mExploredNodes; // Store the number of nodes explored at each move
 
 };
 #endif

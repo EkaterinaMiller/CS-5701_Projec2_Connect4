@@ -4,7 +4,8 @@
 #include "../include/AI_player.h"
 #include <iostream>
 #include <array>
-int getUserInput(int min, int max);
+#include "../include/helpers.h"
+
 int main()
 {
     Connect4 game; //creat a board
@@ -19,6 +20,8 @@ int main()
     int choice = getUserInput(1,5);
 
     Player * player[2];
+    int depth{10};  
+    bool pruning{false};
     switch (choice)
     {    
     case 1:
@@ -26,16 +29,19 @@ int main()
         player[1] = new Human_player(game, 'O');
         break;
     case 2:
+        getParameters(depth, pruning);
         player[0] = new Human_player(game, 'X');
-        player[1] = new AI_player(game, 'O');
+        player[1] = new AI_player(game, 'O', 'X', depth, pruning);
         break;
     case 3:
-        player[0] = new AI_player(game, 'X');
+        getParameters(depth, pruning);
+        player[0] = new AI_player(game, 'X', 'O', depth, pruning);
         player[1] = new Human_player(game, 'O');
         break;
     case 4:
-        player[0] = new AI_player(game, 'X');
-        player[1] = new AI_player(game, 'O');
+        getParameters(depth, pruning);
+        player[0] = new AI_player(game, 'X', 'O', depth, pruning);
+        player[1] = new AI_player(game, 'O', 'X', depth, pruning);
         break;
     default:
         std::cout << "Exiting...\n";
@@ -50,20 +56,18 @@ int main()
         if (game.isWin(player[turn]->getToken()))
         {
             std::cout<<"Player "<<player[turn]->getToken()<<" won!\n";
-            player[0]->printMoveTimes();
-            player[1]->printMoveTimes();
-            return 0;
+            break;
         }
         if (game.isFull())
         {
             std::cout<<"It is a tie!\n";
-            player[0]->printMoveTimes();
-            player[1]->printMoveTimes();
-            return 0;   
+            break;   
         }
         // game.printBoard();
         turn = (turn + 1) % 2; //switch player
     }
+    player[0]->printMoveTimes();
+    player[1]->printMoveTimes();
     // Clean up dynamically allocated players
     delete player[0];
     delete player[1];   

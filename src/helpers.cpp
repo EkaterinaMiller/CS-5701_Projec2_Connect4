@@ -21,3 +21,10 @@ int getUserInput(int min, int max)
         std::cout << "Invalid input. Please enter a number between " << min << " and " << max << ": ";
     }
 }
+void getParameters(int &depth, bool &pruning)
+{
+    std::cout << "Enter the depth for the AI (1-20): ";
+    depth = getUserInput(1, 20);
+    std::cout << "Enable alpha-beta pruning? (1 -yes/0 -no): ";
+    pruning = getUserInput(0, 1) == 1;      
+}
