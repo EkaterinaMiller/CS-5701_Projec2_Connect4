@@ -1,5 +1,6 @@
 #include "../include/AI_player.h"
 #include <chrono>
+#include <limits>
 
 AI_player::AI_player(Connect4 & board, char token) : Player(board, token) {
     std::srand(time(NULL)); // Seed the random number generator with the current time
@@ -7,7 +8,7 @@ AI_player::AI_player(Connect4 & board, char token) : Player(board, token) {
 
 void AI_player::makeaMove(int min, int max){
     auto start = std::chrono::steady_clock::now();
-    int move = findBestMove(min, max);
+    int move = findBestMove(min, max, mUsePruning);
     if (!mConnectBoard.placeToken(mToken, move)) {
         throw std::runtime_error("AI failed to make a move");
     }
@@ -97,26 +98,31 @@ float AI_player::playAtRandom(Connect4 board, int turn) const {
     return score;
 }
 
-int AI_player::findBestMove(int min, int max) const
+int AI_player::findBestMove(int min, int max, bool pruning) const
 {
     int best = 0;
     float maxValue = -std::numeric_limits<float>::infinity();//very small number
+    float alpha = -std::numeric_limits<float>::infinity();
+    float beta = std::numeric_limits<float>::infinity();
     for (int col = min; col <= max; col++) {
         // Create a temporary board to simulate the move
         Connect4 tempBoard = Player::mConnectBoard; 
         if (tempBoard.placeToken(Player::mToken, col)) { // Check if the move is valid
             //get move result
-            float value = minMove(tempBoard, mDepth - 1); // Evaluate the move using minimax
+            float value = minMove(tempBoard, mDepth - 1, pruning, alpha, beta); // Evaluate the move using minimax
             if (value > maxValue) {
                 maxValue = value;
                 best = col;
+            }
+            if (pruning) {
+                alpha = std::max(alpha, maxValue);
             }
         }
     }
     return best; // Return the best move column index
 }
 
-float AI_player::minMove(Connect4 &board, int depth) const
+float AI_player::minMove(Connect4 &board, int depth, bool pruning, float alpha, float beta) const
 {
     if (board.isWin(mToken)) {
         return 100.0f; // AI wins
@@ -135,15 +141,21 @@ float AI_player::minMove(Connect4 &board, int depth) const
         for (int col = 0; col < NUM_COL; col++) {
             Connect4 tempBoard = board; // Create a temporary board to simulate the move
             if (tempBoard.placeToken(mOponentToken, col)) { // Check if the move is valid
-                float value = maxMove(tempBoard, depth - 1); // Evaluate the move using minimax
+                float value = maxMove(tempBoard, depth - 1, pruning, alpha, beta); // Evaluate the move using minimax
                 minValue = std::min(minValue, value); // Update minValue with the minimum score
+                if (pruning) {
+                    beta = std::min(beta, minValue);
+                    if (beta <= alpha) {
+                        break;
+                    }
+                }
             }
         }
         return minValue; // Return the minimum score for this move
 
     }
 }
-float AI_player::maxMove(Connect4 &board, int depth) const
+float AI_player::maxMove(Connect4 &board, int depth, bool pruning, float alpha, float beta) const
 {
     if (board.isWin(mToken)) {
         return 100.0f; // AI wins
@@ -162,8 +174,14 @@ float AI_player::maxMove(Connect4 &board, int depth) const
         for (int col = 0; col < NUM_COL; col++) {
             Connect4 tempBoard = board; // Create a temporary board to simulate the move
             if (tempBoard.placeToken(mToken, col)) { // Check if the move is valid
-                float value = minMove(tempBoard, depth - 1); // Evaluate the move using minimax
+                float value = minMove(tempBoard, depth - 1, pruning, alpha, beta); // Evaluate the move using minimax
                 maxValue = std::max(maxValue, value); // Update maxValue with the maximum score
+                if (pruning) {
+                    alpha = std::max(alpha, maxValue);
+                    if (alpha >= beta) {
+                        break;
+                    }
+                }
             }
         }
         return maxValue; // Return the maximum score for this move
