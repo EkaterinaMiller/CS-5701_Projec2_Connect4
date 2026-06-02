@@ -130,10 +130,10 @@ int AI_player::findBestMove(int min, int max, bool pruning, int &numNodes) const
 float AI_player::minMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const
 {
     if (board.isWin(mToken)) {
-        return 100.0f; // AI wins
+        return FOUR; // AI wins
     }
     else if (board.isWin(mOponentToken)) {
-        return -100.0f; // Opponent wins
+        return -FOUR; // Opponent wins
     }
     else if (board.isFull() ) {
         return 0.0f; // Tie or depth limit reached
@@ -164,10 +164,10 @@ float AI_player::minMove(Connect4 &board, int depth, bool pruning, float alpha, 
 float AI_player::maxMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const
 {
     if (board.isWin(mToken)) {
-        return 100.0f; // AI wins
+        return FOUR; // AI wins
     }
     else if (board.isWin(mOponentToken)) {
-        return -100.0f; // Opponent wins
+        return -FOUR; // Opponent wins
     }
     else if (board.isFull() ) {
         return 0.0f; // Tie or depth limit reached

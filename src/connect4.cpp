@@ -1,7 +1,5 @@
 #include "../include/connect4.h"
-const int FOUR = 100000;
-const int THREE = 100;
-const int TWO = 10;
+
 Connect4::Connect4(const std::array<std::array<char, NUM_COL>, NUM_ROW> & board)
 {
     mBoard = board;

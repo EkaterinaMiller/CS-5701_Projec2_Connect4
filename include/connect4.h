@@ -6,6 +6,9 @@
 #include <array>
 const int NUM_COL = 7;
 const int NUM_ROW = 6;
+const int FOUR = 100000;
+const int THREE = 100;
+const int TWO = 10;
 
 class Connect4
 {
