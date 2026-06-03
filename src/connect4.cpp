@@ -1,10 +1,16 @@
 #include "../include/connect4.h"
-
+/**
+ * @brief Constructor for the Connect4 class
+ * @param board the initial game board
+ */
 Connect4::Connect4(const std::array<std::array<char, NUM_COL>, NUM_ROW> & board)
 {
     mBoard = board;
 
 }
+/**
+ * @brief Prints the current game board
+ */
 void Connect4::printBoard() const
 {
     for (int r {0}; r < NUM_ROW; r++)
@@ -39,6 +45,12 @@ bool Connect4::placeToken(char playerToken, int position)
     }
     return false;
 }
+/**
+ * @brief Makes a turn for the current player
+ * @param playerToken the token of the current player
+ * @param position the column index where the token should be placed
+ * @return true if the turn was successful, false otherwise
+ */
 bool Connect4::turn(char playerToken, int position)
 {
     if (position < 0 || position > NUM_COL-1){
@@ -47,7 +59,11 @@ bool Connect4::turn(char playerToken, int position)
         return placeToken(playerToken, position);
     }
 }
-
+/**
+ * @brief Checks if the current player has won
+ * @param playerToken the token of the current player
+ * @return true if the player has won, false otherwise
+ */
 bool Connect4::isWin(char playerToken) const
 {
     //search for player token starting from top-left
@@ -115,6 +131,10 @@ bool Connect4::isWin(char playerToken) const
     return false;
 }
 
+/**
+ * @brief Checks if the game board is full
+ * @return true if the board is full, false otherwise
+ */     
 bool Connect4::isFull() const
 {
     for (int c{0}; c < NUM_COL; c++)
@@ -132,6 +152,15 @@ bool Connect4::isFull() const
  * 4tokens + 0 empty = 4
  * else return 0
  * */
+/** @brief Counts the number of player tokens in a row with spaces using rule
+ * 2tokens + 2 empty = 2
+ * 3tokens + 1 empty = 3
+ * 4tokens + 0 empty = 4
+ * else return 0
+ * @param row the row index
+ * @param playerToken the token of the current player
+ * @return int the count of player tokens
+ */
 int Connect4::countRow(int row, char playerToken) const
 {
     int total=0;
@@ -166,6 +195,16 @@ int Connect4::countRow(int row, char playerToken) const
     }
     return total;
 }
+/**
+ * @brief Counts the number of player tokens in a column with spaces using rule
+ * 2tokens + 2 empty = 2
+ * 3tokens + 1 empty = 3
+ * 4tokens + 0 empty = 4
+ * else return 0
+ * @param col the column index
+ * @param playerToken the token of the current player
+ * @return int the count of player tokens
+ */
 int Connect4::countCol(int col, char playerToken) const
 {
     int total=0;
@@ -192,12 +231,16 @@ int Connect4::countCol(int col, char playerToken) const
     }
     return total;
 }
-/**
- * @return number of player tokens in the diagonal with spaces
+
+/** @brief Counts the number of player tokens in a diagonal with spaces using rule
  * 2tokens + 2 empty = 2
  * 3tokens + 1 empty = 3
  * 4tokens + 0 empty = 4
  * else return 0
+ * @param row the row index
+ * @param col the column index
+ * @param playerToken the token of the current player
+ * @return int the count of player tokens
  */
 int Connect4::countDiag1(int row, int col, char playerToken) const
 {
@@ -248,7 +291,16 @@ int Connect4::countDiag1(int row, int col, char playerToken) const
     }
     return 0;
 }
-
+/** @brief Counts the number of player tokens in a diagonal with spaces using rule
+ * 2tokens + 2 empty = 2
+ * 3tokens + 1 empty = 3
+ * 4tokens + 0 empty = 4
+ * else return 0
+ * @param row the row index
+ * @param col the column index
+ * @param playerToken the token of the current player
+ * @return int the count of player tokens
+ */
 int Connect4::countDiag2(int row, int col, char playerToken) const
 {
     for (int i = 0; row+i < NUM_ROW && col-i >=0; i++) {

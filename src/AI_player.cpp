@@ -1,12 +1,25 @@
 #include "../include/AI_player.h"
 #include <chrono>
 #include <limits>
-
+/**
+ * @brief Construct a new ai player::ai player object
+ * 
+ * @param board refrence to the game board
+ * @param token tocken for this player
+ * @param oponentToken token for the opponent player
+ * @param depth depth of the minimax search tree
+ * @param usePruning whether to use alpha-beta pruning
+ */
 AI_player::AI_player(Connect4 & board, char token, char oponentToken, int depth, bool usePruning) 
 : Player(board, token), mOponentToken(oponentToken), mDepth(depth), mUsePruning(usePruning) {
     //std::srand(time(NULL)); // Seed the random number generator with the current time
 }
-
+/**
+ * @brief Makes desision on next move and performs the move on the board
+ * 
+ * @param min minimum available move column index
+ * @param max maximum available move column index
+ */
 void AI_player::makeaMove(int min, int max){
     int numNodes = 0; // Initialize the node count for this move
     auto start = std::chrono::steady_clock::now();
@@ -17,7 +30,7 @@ void AI_player::makeaMove(int min, int max){
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double, std::milli> elapsed = end - start;
     mMoveTimes.push_back(elapsed.count());
-     mExploredNodes.push_back(numNodes); // Store the number of nodes explored for this move
+    mExploredNodes.push_back(numNodes); // Store the number of nodes explored for this move
 }
 
 // void AI_player::makeRandomMove(Connect4 &board, int min, int max, char playerToken)
@@ -30,7 +43,18 @@ void AI_player::makeaMove(int min, int max){
 //         }
 //     }
 // }
-
+/**
+ * @brief Evaluates the current state of the board using a heuristic function that 
+ * considers the number of tokens in a row, column, and diagonals for both the AI player 
+ * and the opponent. The score is calculated based on the potential winning positions 
+ * for the AI player and the opponent, with blocking opponent's winning positions 
+ * being more important than creating winning positions for the AI player. 
+ * The positive scores indicate favorable positions for the AI player and 
+ * negative scores indicate unfavorable positions. 
+ * 
+ * @param board 
+ * @return float 
+ */
 float AI_player::evaluateBoard(const Connect4 & board) const 
 {
     float score = 0.0f;
@@ -58,7 +82,7 @@ float AI_player::evaluateBoard(const Connect4 & board) const
         score += board.countDiag2(row, NUM_COL-1, mToken);
         score -= 1.2 * board.countDiag2(row, NUM_COL-1, mOponentToken);
     }
-    return score; //normalize score to be between -1 and 1
+    return score; 
     // //Play 100 times at random and return the average score
     // float score = 0.0f;
     // for (int i = 0; i < 100; i++) {
@@ -100,7 +124,15 @@ float AI_player::evaluateBoard(const Connect4 & board) const
 //     delete player[1];
 //     return score;
 // }
-
+/**
+ * @brief Finds the best move for the AI player using minimax with alpha-beta pruning
+ * 
+ * @param min minimum available move column index
+ * @param max maximum available move column index
+ * @param pruning boolean indicating whether to use alpha-beta pruning is enabled
+ * @param numNodes reference to the number of nodes visited
+ * @return int column index of the best move
+ */
 int AI_player::findBestMove(int min, int max, bool pruning, int &numNodes) const
 {
     int best = 0;
@@ -126,7 +158,17 @@ int AI_player::findBestMove(int min, int max, bool pruning, int &numNodes) const
 
     return best; // Return the best move column index
 }
-
+/**
+ * @brief Evaluates the minimum move for the AI player using minimax with alpha-beta pruning
+ * 
+ * @param board reference to the Connect4 board
+ * @param depth remaining depth of the search
+ * @param pruning boolean indicating whether to use alpha-beta pruning
+ * @param alpha alpha value for alpha-beta pruning
+ * @param beta beta value for alpha-beta pruning
+ * @param numNodes reference to the number of nodes visited
+ * @return float the minimum score for the move
+ */
 float AI_player::minMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const
 {
     if (board.isWin(mToken)) {
@@ -161,6 +203,17 @@ float AI_player::minMove(Connect4 &board, int depth, bool pruning, float alpha, 
 
     }
 }
+/**
+ * @brief Evaluates the maximum move for the AI player using minimax with alpha-beta pruning
+ * 
+ * @param board reference to the Connect4 board
+ * @param depth remaining depth of the search
+ * @param pruning boolean indicating whether to use alpha-beta pruning
+ * @param alpha alpha value for alpha-beta pruning
+ * @param beta beta value for alpha-beta pruning
+ * @param numNodes reference to the number of nodes visited
+ * @return float the maximum score for the move
+ */
 float AI_player::maxMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const
 {
     if (board.isWin(mToken)) {
@@ -195,18 +248,22 @@ float AI_player::maxMove(Connect4 &board, int depth, bool pruning, float alpha, 
 
     }
 }
-
-void AI_player::printExploredNodes() const {
-        std::cout << "Explored nodes for player " << mToken << ": ";
-        if (mExploredNodes.empty()) {
-            std::cout << "none\nAverage: 0 nodes" << std::endl;
-            return;
-        }
-        int total{0};
-        for (size_t i = 0; i < mExploredNodes.size(); ++i) {
-            total += mExploredNodes[i];
-            std::cout << mExploredNodes[i] << " ,";
-        }
-
-        std::cout << "\nAverage: " << static_cast<double>(total) / mExploredNodes.size() << " nodes" << std::endl;
+/**
+ * @brief Calculates the average number of nodes explored by the AI player
+ * 
+ * @return double the average number of nodes explored
+ */
+double AI_player::averageExploredNodes() const {
+    std::cout << "Explored nodes for player " << mToken << ": ";
+    if (mExploredNodes.empty()) {
+        std::cout << "none\nAverage: 0 nodes" << std::endl;
+        return -1.0; // Return -1 to indicate no nodes were explored
     }
+    int total{0};
+    for (size_t i = 0; i < mExploredNodes.size(); ++i) {
+        total += mExploredNodes[i];
+        std::cout << mExploredNodes[i] << " ,";
+    }
+
+    return static_cast<double>(total) / mExploredNodes.size();
+}

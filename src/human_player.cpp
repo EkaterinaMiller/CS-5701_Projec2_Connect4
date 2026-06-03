@@ -1,7 +1,11 @@
 #include "../include/human_player.h"
 #include "../include/helpers.h"
 #include <chrono>
-
+/**
+ * @brief Makes a move for the human player
+ * @param min minimum available move column index
+ * @param max maximum available move column index
+ */
 void Human_player::makeaMove(int min, int max){
     auto start = std::chrono::steady_clock::now();
     std::cout << "Human turn. Enter column (" << min+1 << "-" << max+1 << "): ";

@@ -17,15 +17,15 @@ public:
     int getDepth() const { return mDepth; }
     void setPruning(bool usePruning) { mUsePruning = usePruning; }
     bool getPruning() const { return mUsePruning; }
-    virtual ~AI_player(){printExploredNodes();} // Print explored nodes when the AI player is destroyed;
-private:
+    double averageExploredNodes() const;
     float evaluateBoard(const Connect4 & board) const;
     int findBestMove(int min, int max, bool pruning, int &numNodes) const;
     float minMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const;
     float maxMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const;
-    void printExploredNodes() const ;
     //float playAtRandom(Connect4 board, int turn=0) const;
     //void makeRandomMove(Connect4 &board, int min, int max, char playerToken);
+    virtual ~AI_player()=default; 
+private:
 
     char mOponentToken{' '};
     int mDepth{10};

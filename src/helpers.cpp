@@ -1,6 +1,11 @@
 #include "../include/helpers.h"
 #include <string>
-
+/**
+ * @brief Gets user input within a specified range
+ * @param min minimum allowed value
+ * @param max maximum allowed value
+ * @return int the user input
+ */
 int getUserInput(int min, int max)
 {
     std::string input;
@@ -21,6 +26,11 @@ int getUserInput(int min, int max)
         std::cout << "Invalid input. Please enter a number between " << min << " and " << max << ": ";
     }
 }
+/**
+ * @brief Gets the parameters for the AI player
+ * @param depth reference to the depth for the AI
+ * @param pruning reference to the boolean indicating whether to use alpha-beta pruning
+ */
 void getParameters(int &depth, bool &pruning)
 {
     std::cout << "Enter the depth for the AI (1-20): ";

@@ -22,6 +22,8 @@ int main()
     Player * player[2];
     int depth{10};  
     bool pruning{false};
+    bool ai1{false};
+    bool ai2{false};    
     switch (choice)
     {    
     case 1:
@@ -32,16 +34,20 @@ int main()
         getParameters(depth, pruning);
         player[0] = new Human_player(game, 'X');
         player[1] = new AI_player(game, 'O', 'X', depth, pruning);
+        ai2 = true;
         break;
     case 3:
         getParameters(depth, pruning);
         player[0] = new AI_player(game, 'X', 'O', depth, pruning);
         player[1] = new Human_player(game, 'O');
+        ai1 = true;
         break;
     case 4:
         getParameters(depth, pruning);
         player[0] = new AI_player(game, 'X', 'O', depth, pruning);
         player[1] = new AI_player(game, 'O', 'X', depth, pruning);
+        ai1 = true;
+        ai2 = true;
         break;
     default:
         std::cout << "Exiting...\n";
@@ -66,8 +72,18 @@ int main()
         // game.printBoard();
         turn = (turn + 1) % 2; //switch player
     }
-    player[0]->printMoveTimes();
-    player[1]->printMoveTimes();
+    std::cout << "Player " << player[0]->getToken() << " average move time: " 
+            << player[0]->printMoveTimes() << " ms" << std::endl;
+    std::cout << "Player " << player[1]->getToken() << " average move time: " 
+            << player[1]->printMoveTimes() << " ms" << std::endl  ;
+    if (ai1) {
+        std::cout << "AI Player " << player[0]->getToken() << " average explored nodes: " 
+                << dynamic_cast<AI_player*>(player[0])->averageExploredNodes() << std::endl;
+    }
+    if (ai2) {
+        std::cout << "AI Player " << player[1]->getToken() << " average explored nodes: " 
+                << dynamic_cast<AI_player*>(player[1])->averageExploredNodes() << std::endl;
+    }   
     // Clean up dynamically allocated players
     delete player[0];
     delete player[1];   

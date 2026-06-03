@@ -5,7 +5,10 @@ FLAGS= -Wall -Wextra -pedantic-errors -g
 obj/%.o: src/%.cpp | obj
 	$(CC) $(FLAGS) -c $< -o $@
 
-test: TESTS/catch_amalgamated.o TESTS/test.o obj/connect4.o
+run_tests: test
+	./TESTS/test
+
+test: TESTS/catch_amalgamated.o TESTS/test.o obj/connect4.o obj/human_player.o obj/AI_player.o obj/helpers.o
 	$(CC) $(FLAGS) $^ -o TESTS/test
 
 TESTS/catch_amalgamated.o: TESTS/catch_amalgamated.hpp
