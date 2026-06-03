@@ -11,6 +11,7 @@ public:
     void setToken(char t){mToken=t; }
     virtual void makeaMove(int min, int max) = 0; //pure virtual function
     virtual ~Player() = default;
+    const std::vector<double> &getMoveTimes() const { return mMoveTimes; }
     double printMoveTimes() const {
         std::cout << "Move times for player " << mToken << ": ";
         if (mMoveTimes.empty()) {

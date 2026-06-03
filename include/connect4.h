@@ -25,6 +25,8 @@ public:
     bool isWin(char playerToken) const;
     bool isFull() const;
     bool isDone() const {return mDone;}
+    bool isColumnAvailable(int position) const;
+    const std::array<std::array<char, NUM_COL>, NUM_ROW> &getBoard() const { return mBoard; }
     int countRow(int row, char playerToken) const;
     int countCol(int col, char playerToken) const;
     int countDiag1(int row, int col, char playerToken) const;

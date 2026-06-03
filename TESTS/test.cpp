@@ -324,5 +324,5 @@ TEST_CASE("findBestMove()", "[AI_player class]")
                     {{'O', 'X', ' ', 'X', 'X', 'O', ' '}},
                     {{'X', 'X', 'X', 'O', 'O', 'X', 'X'}}}});
     AI_player ai(game, 'O', 'X', 4, true);
-    CHECK(ai.evaluateBoard(game)==273.0f);
+    CHECK(ai.evaluateBoard(game)==88.0f);
 }

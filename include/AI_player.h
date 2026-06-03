@@ -18,6 +18,7 @@ public:
     void setPruning(bool usePruning) { mUsePruning = usePruning; }
     bool getPruning() const { return mUsePruning; }
     double averageExploredNodes() const;
+    const std::vector<int> &getExploredNodes() const { return mExploredNodes; }
     float evaluateBoard(const Connect4 & board) const;
     int findBestMove(int min, int max, bool pruning, int &numNodes) const;
     float minMove(Connect4 &board, int depth, bool pruning, float alpha, float beta, int &numNodes) const;

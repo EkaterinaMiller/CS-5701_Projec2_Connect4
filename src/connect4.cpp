@@ -59,6 +59,11 @@ bool Connect4::turn(char playerToken, int position)
         return placeToken(playerToken, position);
     }
 }
+
+bool Connect4::isColumnAvailable(int position) const
+{
+    return position >= 0 && position < NUM_COL && mBoard[0][position] == ' ';
+}
 /**
  * @brief Checks if the current player has won
  * @param playerToken the token of the current player
@@ -146,12 +151,7 @@ bool Connect4::isFull() const
     }
     return true;
 }
- /* REtunr number of player tokens in the row with spaces
- * 2tokens + 2 empty = 2
- * 3tokens + 1 empty = 3
- * 4tokens + 0 empty = 4
- * else return 0
- * */
+
 /** @brief Counts the number of player tokens in a row with spaces using rule
  * 2tokens + 2 empty = 2
  * 3tokens + 1 empty = 3
