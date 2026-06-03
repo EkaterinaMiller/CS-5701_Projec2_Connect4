@@ -1,3 +1,11 @@
+/**
+ * @file helpers.cpp
+ * @author Ekaterina Miller
+ * @brief Implementation of helper functions for Connect4 game, 
+ *        including user input handling and AI parameter configuration
+ * @date 2026-06-02
+ * 
+ */
 #include "../include/helpers.h"
 #include <string>
 /**

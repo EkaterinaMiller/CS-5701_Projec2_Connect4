@@ -1,3 +1,10 @@
+/**
+ * @file human_player.h
+ * @author Ekaterina Miller
+ * @brief Human player class for Connect4 game, allowing user input for moves
+ * @date 2026-06-02
+ * 
+ */
 #ifndef HUMAN_PLAYER_H
 #define HUMAN_PLAYER_H
 #include "connect4.h"

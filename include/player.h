@@ -1,3 +1,10 @@
+/**
+ * @file player.h
+ * @author Ekaterina Miller
+ * @brief Base Player class for Connect4 game, representing a player with a token and move times
+ * @date 2026-06-02
+ * 
+ */
 #ifndef PLAYER_H
 #define PLAYER_H 
 #include "connect4.h"  

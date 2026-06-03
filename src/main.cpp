@@ -1,3 +1,10 @@
+/**
+ * @file main.cpp
+ * @author Ekaterina Miller
+ * @brief Main function for the CLI Connect4 game
+ * @date 2026-06-02
+ * 
+ */
 #include "../include/connect4.h"
 #include "../include/player.h"
 #include "../include/human_player.h"

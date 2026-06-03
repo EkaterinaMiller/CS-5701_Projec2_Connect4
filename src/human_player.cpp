@@ -1,3 +1,11 @@
+/**
+ * @file human_player.cpp
+ * @author Ekaterina Miller
+ * @brief Implementation of the Human_player class for Connect4 game, 
+ *        allowing user input for moves
+ * @date 2026-06-02
+ * 
+ */
 #include "../include/human_player.h"
 #include "../include/helpers.h"
 #include <chrono>

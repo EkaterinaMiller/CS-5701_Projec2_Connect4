@@ -38,6 +38,8 @@
 *.exe
 *.out
 *.app
+connect4_CLI
+connect4_GUI
 
 # Build directories
 build/

@@ -1,3 +1,10 @@
+/**
+ * @file connect4.h
+ * @author Ekaterina Miller
+ * @brief Connect4 game class, representing the game board and logic for playing Connect4
+ * @date 2026-06-02
+ * 
+ */
 #ifndef CONNECT4_H
 #define CONNECT4_H
 

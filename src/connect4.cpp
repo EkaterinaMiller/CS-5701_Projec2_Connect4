@@ -1,3 +1,10 @@
+/**
+ * @file connect4.cpp
+ * @author Ekaterina Miller
+ * @brief Implementation of the Connect4 game class, including game logic and board management
+ * @date 2026-06-02
+ * 
+ */
 #include "../include/connect4.h"
 /**
  * @brief Constructor for the Connect4 class

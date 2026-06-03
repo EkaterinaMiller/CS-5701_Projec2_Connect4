@@ -1,3 +1,11 @@
+/**
+ * @file AI_player.h
+ * @author Ekaterina Miller
+ * @brief AI player class for Connect4 game, 
+ *          implementing minimax algorithm with optional alpha-beta pruning
+ * @date 2026-06-02
+ * 
+ */
 #ifndef AI_PLAYER_H
 #define AI_PLAYER_H
 #include "connect4.h"

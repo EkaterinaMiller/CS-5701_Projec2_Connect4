@@ -1,3 +1,10 @@
+/* 
+ * @file AI_player.cpp
+ * @author Ekaterina Miller
+ * @brief Implementation of the AI player class for Connect4 game
+ * @date 2026-06-02
+ * 
+ */
 #include "../include/AI_player.h"
 #include <chrono>
 #include <limits>
