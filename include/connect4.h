@@ -40,7 +40,7 @@ public:
     int countDiag2(int row, int col, char playerToken) const;
 
 
-private:
+protected:
     std::array<std::array<char, NUM_COL>, NUM_ROW> mBoard;
     bool mDone = false;
 };

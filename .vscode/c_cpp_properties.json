@@ -3,9 +3,10 @@
     {
       "name": "linux-gcc-x64",
       "includePath": [
-        "${workspaceFolder}/**"
+        "${workspaceFolder}/**",
+        "C:\\SFML-3.1.0\\include"
       ],
-      "compilerPath": "/usr/bin/gcc",
+      "compilerPath": "C:\\mingw64\\bin\\g++.exe",
       "cStandard": "${default}",
       "cppStandard": "${default}",
       "intelliSenseMode": "linux-gcc-x64",

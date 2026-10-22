@@ -1,5 +1,7 @@
+-include config.mk
+
 CC=g++ 
-FLAGS= -Wall -Wextra -pedantic-errors -g
+FLAGS= -Wall -Wextra -pedantic-errors #-g
 SFML_LIBS= -lsfml-graphics -lsfml-window -lsfml-system
 
 
