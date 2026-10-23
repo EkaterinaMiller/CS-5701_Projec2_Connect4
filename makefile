@@ -23,7 +23,7 @@ obj/connect4.o: src/connect4.cpp include/connect4.h
 connect4_CLI: obj/main.o obj/connect4.o obj/human_player.o obj/AI_player.o obj/helpers.o
 	$(CC) $(FLAGS) $^ -o connect4_CLI
 
-connect4_GUI: obj/gui_main.o obj/gui_board.o obj/gui_button.o obj/gui_game.o obj/gui_menu.o obj/connect4.o obj/AI_player.o
+connect4_GUI: obj/gui_main.o obj/gui_board.o obj/gui_button.o obj/gui_game.o obj/gui_menu.o obj/connect4.o obj/AI_player.o obj/human_player.o obj/helpers.o
 	$(CC) $(FLAGS) $^ -o connect4_GUI $(SFML_LIBS)
 
 obj/main.o: src/main.cpp include/connect4.h include/player.h include/human_player.h include/AI_player.h include/helpers.h
@@ -34,7 +34,7 @@ obj/helpers.o: src/helpers.cpp include/helpers.h
 
 obj/gui_%.o: src/gui_%.cpp | obj
 	$(CC) $(FLAGS) $(IFLAGS) -c $< -o $@
-GUI_HEADERS = include/gui_game.h include/gui_states.h include/gui_menu.h include/gui_board.h include/gui_button.h include/connect4.h include/player.h include/AI_player.h
+GUI_HEADERS = include/gui_game.h include/gui_states.h include/gui_menu.h include/gui_board.h include/gui_button.h include/connect4.h include/player.h include/AI_player.h include/human_player.h
 obj/gui_main.o: src/gui_main.cpp $(GUI_HEADERS)
 obj/gui_board.o:src/gui_board.cpp $(GUI_HEADERS)
 obj/gui_button.o: src/gui_button.cpp $(GUI_HEADERS)
@@ -47,8 +47,28 @@ run_CLI: connect4_CLI
 run_GUI: connect4_GUI
 	./connect4_GUI
 
+#Find all files in the src directory whose names end in .cpp.
+SOURCES = $(wildcard src/*.cpp)
+#for each cpp file in the src directory, creat coresponding file in obj directory
+OBJECTS = $(patsubst src/%.cpp,obj/%.o,$(SOURCES))
+
+# Detect operating system
+ifeq ($(OS),Windows_NT)
+	MKDIR = if not exist obj mkdir obj
+	EXE = .exe
+	RM = del /Q
+	CLEAN_OBJECTS = $(subst /,\,$(OBJECTS))
+else
+	MKDIR = mkdir -p obj
+	EXE =
+	RM = rm -f
+	CLEAN_OBJECTS = $(OBJECTS)
+endif
+
 clean:
-	rm -f obj/*.o connect4_CLI connect4_GUI TESTS/test 
+	$(RM) $(CLEAN_OBJECTS) *$(EXE)
+
+#rm -f obj/*.o connect4_CLI connect4_GUI TESTS/test 
 
 obj:
-	mkdir -p obj
+	$(MKDIR)

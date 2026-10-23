@@ -37,7 +37,6 @@ sf::Vector2f size =static_cast<sf::Vector2f>(window.getSize());
             break;
         case SETUP:
             setTheGame(size);
-            mGameState = GAME;
             break;
         case GAME:
             mBoard.handleInput(*event, window);
@@ -92,28 +91,25 @@ void Game::render(sf::RenderWindow& window)
 }
 
 void Game::setTheGame(sf::Vector2f size)
-{
+{     
     mGameMode=mMenu.getMode();
-    mModeMessage.setString(MODE[mGameMode]);
-    mModeMessage.setOrigin({mModeMessage.getGlobalBounds().size.x/2, mModeMessage.getGlobalBounds().size.y/2});
-    mModeMessage.setPosition({size.x*27/40, 50});
-     
     switch (mGameMode)
     {    
     case HvsH:
-        // player[0] = new Human_player(mGame, 'X');
-        // player[1] = new Human_player(mGame, 'O');
+        player[0] = new Human_player(mGame, 'X');
+        player[1] = new Human_player(mGame, 'O');
+        mGameState = GAME;
         break;
     case HvsA:
         //getParameters(depth, pruning);
-        //player[0] = new Human_player(mGame, 'X');
+        player[0] = new Human_player(mGame, 'X');
         player[1] = new AI_player(mGame, 'O', 'X', mDepth, mPruning);
         ai2 = true;
         break;
     case AvsH:
         //getParameters(depth, pruning);
         player[0] = new AI_player(mGame, 'X', 'O', mDepth, mPruning);
-        //player[1] = new Human_player(mGame, 'O');
+        player[1] = new Human_player(mGame, 'O');
         ai1 = true;
         break;
     case AvsA:
@@ -123,6 +119,14 @@ void Game::setTheGame(sf::Vector2f size)
         ai1 = true;
         ai2 = true;
         break;
+    case UKN:
+        mGameState=START;
+        return;
+        break;
     }
-    int turn = 0;
+    
+    mModeMessage.setString(MODE[mGameMode]);
+    mModeMessage.setOrigin({mModeMessage.getGlobalBounds().size.x/2, mModeMessage.getGlobalBounds().size.y/2});
+    mModeMessage.setPosition({size.x*27/40, 50});
+    mGameState = GAME;
 }

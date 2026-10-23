@@ -6,7 +6,7 @@
 #include "AI_player.h"
 #include "gui_menu.h"
 #include "gui_board.h"
-#include "player.h"
+#include "human_player.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
