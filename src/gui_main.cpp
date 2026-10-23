@@ -16,9 +16,10 @@
 #include <iostream>
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode({800, 500}), "My Game");
+    sf::RenderWindow window(sf::VideoMode({1000, 800}), "My Game");
     window.setPosition({50,50});
-    Game game;
+    sf::Vector2f size =static_cast<sf::Vector2f>(window.getSize());
+    Game game(size);
    
     sf::Clock clock; 
 

@@ -1,14 +1,28 @@
 #include "../include/gui_game.h"
 
-Game::Game()
+Game::Game(sf::Vector2f size):mModeMessage(mFont), mTurnMessage(mFont)
 {
     mGameState = START;
+    if (!mFont.openFromFile("assets/college.ttf"))
+    {
+        std::cerr<<"Error opening file\n";
+        exit(2);
+    }
+    mMenu.setSize({size.x*7/20, size.y});
+    mBoard.setPosition({size.x*7/20, 0});
+    mBoard.setSize({size.x*13/20, size.y});
+    mModeMessage.setFont(mFont);
+    mTurnMessage.setFont(mFont);
+    mModeMessage.setFillColor(sf::Color({203, 198, 245}));
+    mTurnMessage.setFillColor(sf::Color({203, 198, 245}));
+    mModeMessage.setString("");
+    mTurnMessage.setString("");
 }
 
 //Handle events from input devices and the window
 void Game::handleInput(sf::RenderWindow& window)
 {
-
+sf::Vector2f size =static_cast<sf::Vector2f>(window.getSize());
     while(const std::optional<sf::Event> event =window.pollEvent())
     {
         if(event->is<sf::Event::Closed>())
@@ -18,22 +32,26 @@ void Game::handleInput(sf::RenderWindow& window)
         }
         switch (mGameState)
         {
-        case welcome:
-//std::cout<<"Game::handleInput case welcome" <<std::endl;
-            mGameState = mWelcomeScreen.handleInput(*event, window);
+        case START:
+            mGameState = mMenu.handleInput(*event, window);
             break;
-        case game:
-//std::cout<<"Game::handleInput case game" <<std::endl;
-            mGameState = mGame.handleInput(*event, window);
+        case SETUP:
+            setTheGame(size);
+            mGameState = GAME;
             break;
-        case results:
+        case GAME:
+            mBoard.handleInput(*event, window);
+            if(mBoard.isDone()){
+                mGameState = RESULT;
+            }
+            break;
+        case RESULT:
 //std::cout<<"Game::handleInput case result" <<std::endl;
-            mGameState=mResults.handleInput(*event, window);
+            mGameState=mMenu.handleInput(*event, window);
             break;
-        case quit:
-//std::cout<<"Game::handleInput case quit" <<std::endl;
-            window.close();
-            break;            
+        // default:
+        //     window.close();
+        //     break;            
         }
     }
 }
@@ -41,25 +59,24 @@ void Game::handleInput(sf::RenderWindow& window)
 //Update objects in the scene
 void Game::update(double elapsedTime, sf::RenderWindow& window)
 {
-    switch (mGameState)
-        {
-        case welcome:
-//std::cout<<"Game::update case welcome" <<std::endl;
-            mWelcomeScreen.update();
-            break;
-        case game:
-//std::cout<<"Game::update case game" <<std::endl;
-            mGame.update(elapsedTime, window);
-            break;
-        case results:
-//std::cout<<"Game::update case result" <<std::endl;
-            mResults.update();
-            break;
-        case quit:
-//std::cout<<"Game::update case quit" <<std::endl;
-            window.close();
-            break;            
-        }
+    mMenu.update(window);
+    mBoard.update(elapsedTime, window);
+    // switch (mGameState)
+    //     {
+    //     case START:
+    //         mMenu.update(elapsedTime, window);
+    //         mBoard.update(elapsedTime, window);
+    //         break;
+    //     case GAME:
+    //         mBoard.update(elapsedTime, window);
+    //         break;
+    //     case RESULT:
+    //         mBoard.update(elapsedTime, window);
+    //         break;
+    //     default:
+    //         window.close();
+    //         break;            
+    //     }
 }
 
 
@@ -67,26 +84,45 @@ void Game::update(double elapsedTime, sf::RenderWindow& window)
 void Game::render(sf::RenderWindow& window)
 {
     window.clear(sf::Color::Black);
-    //mWindow.draw(mCherryPlant);
-    switch (mGameState)
-        {
-        case welcome:
-            mWelcomeScreen.render(window);
-            break;
-        case game:
-            mGame.render(window);
-            break;
-        case results:
-            mResults.render(window);
-            break;
-        case quit:
-            break;          
-        }
+    mMenu.render(window);
+    mBoard.render(window);
+    window.draw(mModeMessage);
+    window.draw(mTurnMessage);
     window.display();
 }
 
-//Check if game is done, right now, we just checked if window is still open
-// bool Game::isDone() const
-// {
-//     return (!mWindow.isOpen());
-// }
+void Game::setTheGame(sf::Vector2f size)
+{
+    mGameMode=mMenu.getMode();
+    mModeMessage.setString(MODE[mGameMode]);
+    mModeMessage.setOrigin({mModeMessage.getGlobalBounds().size.x/2, mModeMessage.getGlobalBounds().size.y/2});
+    mModeMessage.setPosition({size.x*27/40, 50});
+     
+    switch (mGameMode)
+    {    
+    case HvsH:
+        // player[0] = new Human_player(mGame, 'X');
+        // player[1] = new Human_player(mGame, 'O');
+        break;
+    case HvsA:
+        //getParameters(depth, pruning);
+        //player[0] = new Human_player(mGame, 'X');
+        player[1] = new AI_player(mGame, 'O', 'X', mDepth, mPruning);
+        ai2 = true;
+        break;
+    case AvsH:
+        //getParameters(depth, pruning);
+        player[0] = new AI_player(mGame, 'X', 'O', mDepth, mPruning);
+        //player[1] = new Human_player(mGame, 'O');
+        ai1 = true;
+        break;
+    case AvsA:
+        //getParameters(depth, pruning);
+        player[0] = new AI_player(mGame, 'X', 'O', mDepth, mPruning);
+        player[1] = new AI_player(mGame, 'O', 'X', mDepth, mPruning);
+        ai1 = true;
+        ai2 = true;
+        break;
+    }
+    int turn = 0;
+}
